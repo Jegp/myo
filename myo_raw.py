@@ -449,6 +449,7 @@ if __name__ == '__main__':
     m = MyoRaw(sys.argv[1] if len(sys.argv) >= 2 else None)
 
     def proc_emg(emg, moving, times=[]):
+        logging.warn(emg)
         if HAVE_PYGAME:
             ## update pygame display
             plot(scr, [e / 2000. for e in emg])

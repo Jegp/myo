@@ -30,7 +30,6 @@ class Trainer(Process):
         self.path = path
 
     def classify(self, p):
-        logging.info("Has" + str(hasattr(self, "classifier")))
         if hasattr(self, "classifier"):
             y = self.classifier.predict(p)
             return pose_map[y]
@@ -52,6 +51,8 @@ class Trainer(Process):
         logging.info([d.to_numpy().shape for d in self.poses])
         data = np.concatenate([d.to_numpy() for d in self.poses])
         labels = np.concatenate([d.to_labels() for d in self.poses])
+        np.save("X", data)
+        np.save("Y", labels)
         classifier.fit(data, labels)
         score = classifier.score(data, labels)
         logging.info("Classified with mean accuracy " + str(score))
@@ -63,7 +64,7 @@ class Trainer(Process):
                 logging.info("Assume pose '{}'".format(pose.name))
                 time.sleep(1)
                 logging.info("... Recording")
-                self.record(5, pose)
+                self.record(10, pose)
 
             self.train()
             logging.info("Training complete")
